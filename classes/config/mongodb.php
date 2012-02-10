@@ -27,9 +27,68 @@ class Config_MongoDB extends Kohana_Config_Reader
 
 	public function __construct()
 	{
-		$this->_mongo = Mongo_Database::instance();
+		/**
+		 *  We load our (likely file-based) configuration,
+		 *  from our previously attached driver (this one
+		 *  hasn't been completely attached yet)
+		 */
+		$config = Kohana::$config->load('config');
+
+		$userstr = '';
+		if($config->username !== NULL)
+		{
+			$userstr = "$config->username:$config->password@";
+		}
+
+		// Normally we would use v_mongo, but we don't have that loaded yet
+		$this->_mongo = new Mongo("mongodb://{$userstr}{$config->host}");
+		$this->_db = $this->_mongo->{$config->db};
 
 		parent::__construct();
 	}
 
+	
+	/**
+	 * Load and merge all of the configuration files in this group.
+	 *		
+	 *     $config->load($name);
+	 *
+	 * @param   string  configuration group name
+	 * @param   array   configuration array
+	 * @return  $this   clone of the current object
+	 * @uses    Kohana::load
+	 */
+	public function load($group, array $config = NULL)
+	{
+		(Kohana::$profiling === TRUE) ? $token = Profiler::start("Mongo Config", __FUNCTION__):FALSE;
+		$file = $this->_db->$group;
+		$config = array();
+
+		$documents = $file->find();
+
+		if ($documents->count() === 0)
+		{
+			Kohana::$config->detach($this);
+			$__config = Kohana::$config->load($group)->as_array();
+
+			try {
+				$file->insert($__config, array('fsync'=>TRUE));	
+			} catch (Exception $e) {
+				array_walk_recursive($__config, function($value, $key){if (is_object($value))$value=serialize($value);});
+				var_dump($__config);
+				$file->insert($__config, array('fsync'=>TRUE));
+			}
+
+			Kohana::$config->attach($this);
+
+		} else {
+			foreach($documents as $__doc)
+			{
+				$config = array_merge($config, $__doc);
+			}
+		}
+
+		isset($token)?Profiler::stop($token):FALSE;
+		return parent::load($group, $config);
+	}
 }
