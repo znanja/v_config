@@ -69,14 +69,13 @@ class Config_MongoDB extends Kohana_Config_Reader
 		if ($documents->count() === 0)
 		{
 			Kohana::$config->detach($this);
-			$__config = Kohana::$config->load($group)->as_array();
+			$config = Kohana::$config->load($group)->as_array();
 
 			try {
-				$file->insert($__config, array('fsync'=>TRUE));	
+				$file->insert($config, array('fsync'=>TRUE));	
 			} catch (Exception $e) {
-				array_walk_recursive($__config, function($value, $key){if (is_object($value))$value=serialize($value);});
-				var_dump($__config);
-				$file->insert($__config, array('fsync'=>TRUE));
+				array_walk_recursive($config, function($value, $key){if (is_object($value))$value=serialize($value);});
+				$file->insert($config, array('fsync'=>TRUE));
 			}
 
 			Kohana::$config->attach($this);
