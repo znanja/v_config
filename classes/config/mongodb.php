@@ -74,7 +74,7 @@ class Config_MongoDB extends Kohana_Config_Reader
 			try {
 				$file->insert($config, array('fsync'=>TRUE));	
 			} catch (Exception $e) {
-				array_walk_recursive($config, function($value, $key){if (is_object($value))$value=serialize($value);});
+				array_walk_recursive($config, function($value, $key){if (is_object($value))$config[$key]=serialize($value);});
 				$file->insert($config, array('fsync'=>TRUE));
 			}
 
