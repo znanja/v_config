@@ -63,7 +63,7 @@ class Config_MongoDB extends Kohana_Config_Reader
 		(Kohana::$profiling === TRUE) ? $token = Profiler::start("Mongo Config", __FUNCTION__):FALSE;
 
 		$file = $this->_db->selectCollection($group);
-		$file->ensureIndex('_id');
+
 		$config = array();
 
 		$documents = $file->find();
