@@ -61,7 +61,7 @@ class Controller_RegisterConfig extends Controller
 			 * reverse, so we have the correct order from the cascading file
 			 * system
 			 */
-			$__files = array_reverse(Kohana::find_file('config', $name, NULL, TRUE);
+			$__files = array_reverse(Kohana::find_file('config', $name, NULL, TRUE));
 			foreach($__files as $__merge)
 			{
 				echo "Merging...\n";
