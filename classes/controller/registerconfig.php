@@ -51,18 +51,31 @@ class Controller_RegisterConfig extends Controller
 
 		foreach (Kohana::list_files('config') as $_name => $_file)
 		{
-			try
-			{
-				$__config = include $_file;
-			}catch(Exception $ex)
-			{
-				echo "ERROR: Looks like I got an error: {$ex->getMessage()}\n";
-				$__config = array();
-			}
 			$name = preg_replace("/config\/(.*?)\.php/", "$1", $_name);
-
 			echo "Loading $name...\n";
-			$this->_load($__config, $name);
+
+			$__merged_config = array();
+			
+			/**
+			 * Merge all the configurations together. Load the configuration in
+			 * reverse, so we have the correct order from the cascading file
+			 * system
+			 */
+			$__files = array_reverse(Kohana::find_file('config', $name, NULL, TRUE);
+			foreach($__files as $__merge)
+			{
+				echo "Merging...\n";
+				try {
+					$__config = include $__merge;
+				} catch (Exception $ex) {
+					echo "ERROR: Looks like I got an error: {$ex->getMessage()}\n";
+					$__config = array();
+				}
+				$__merged_config = array_merge($__config, $__merged_config);
+			}
+
+			$this->_load($__merged_config, $name);
+
 			echo "Done loading $name\n";
 		}
 
