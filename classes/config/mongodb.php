@@ -61,26 +61,15 @@ class Config_MongoDB extends Kohana_Config_Reader
 	public function load($group, array $config = NULL)
 	{
 		(Kohana::$profiling === TRUE) ? $token = Profiler::start("Mongo Config", __FUNCTION__):FALSE;
-		$file = $this->_db->$group;
+
+		$file = $this->_db->selectCollection($group);
+		$file->ensureIndex('_id');
 		$config = array();
 
 		$documents = $file->find();
 
-		if ($documents->count() === 0)
+		if ($documents->count() > 0)
 		{
-			Kohana::$config->detach($this);
-			$config = Kohana::$config->load($group)->as_array();
-
-			try {
-				$file->insert($config, array('fsync'=>TRUE));	
-			} catch (Exception $e) {
-				array_walk_recursive($config, function($value, $key){if (is_object($value))$config[$key]=serialize($value);});
-				$file->insert($config, array('fsync'=>TRUE));
-			}
-
-			Kohana::$config->attach($this);
-
-		} else {
 			foreach($documents as $__doc)
 			{
 				$config = array_merge($config, $__doc);

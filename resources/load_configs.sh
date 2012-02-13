@@ -1,0 +1,1 @@
+php `dirname $0`/../../../index.php --uri=v_config/registerconfig $*
