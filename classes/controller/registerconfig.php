@@ -66,14 +66,17 @@ class Controller_RegisterConfig extends Controller
 			{
 				echo "Merging...\n";
 				try {
-					$__config = include $__merge;
+					// If there is actual PHP in our config, we might mess up our scoping
+					$cscope = function() use($__merge) {return include $__merge;};
+					$__config = $cscope();
 				} catch (Exception $ex) {
 					echo "ERROR: Looks like I got an error: {$ex->getMessage()}\n";
 					$__config = array();
 				}
+
 				$__merged_config = array_merge($__config, $__merged_config);
 			}
-
+			
 			$this->_load($__merged_config, $name);
 
 			echo "Done loading $name\n";
