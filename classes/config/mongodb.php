@@ -75,6 +75,8 @@ class Config_MongoDB extends Kohana_Config_Reader
 				$config = array_merge($config, $__doc);
 			}
 		}
+		
+		unset($config['_id']);
 
 		isset($token)?Profiler::stop($token):FALSE;
 		return parent::load($group, $config);
