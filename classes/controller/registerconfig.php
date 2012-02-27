@@ -74,7 +74,7 @@ class Controller_RegisterConfig extends Controller
 					$__config = array();
 				}
 
-				$__merged_config = array_merge($__config, $__merged_config);
+				$__merged_config = Arr::merge($__config, $__merged_config);
 			}
 			
 			$this->_load($__merged_config, $name);
