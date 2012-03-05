@@ -5,7 +5,7 @@
  *
  * @package Velsoft/Config
  * @category Resources
- * @author Velsoft Training Materials, Inc.
+ * @author znanja, inc
  */
 class Controller_RegisterConfig extends Controller
 {

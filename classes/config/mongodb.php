@@ -8,7 +8,7 @@
  * besides Kohana, and can be edited on the fly (to update shared databases,
  * master/slave DBs or make general changes via a config)
  *
- * @author Velsoft Training Materials
+ * @author znanja, inc
  * @category Configuration
  * @package Velsoft/Config
  * @see Kohana::$config
