@@ -10,7 +10,7 @@
  *
  * @author znanja, inc
  * @category Configuration
- * @package Velsoft/Config
+ * @package znanja/Config
  * @see Kohana::$config
  */
 class Config_MongoDB extends Kohana_Config_Reader

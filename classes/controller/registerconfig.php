@@ -3,7 +3,7 @@
  * Read the read the configuration files from the filesystem,
  * and load them into the database
  *
- * @package Velsoft/Config
+ * @package znanja/Config
  * @category Resources
  * @author znanja, inc
  */
