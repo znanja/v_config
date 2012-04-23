@@ -70,7 +70,7 @@ class Config_MongoDB extends Kohana_Config_Reader
 
 		while($documents->hasNext())
 		{
-			$__doc->getNext();
+			$__doc = $documents->getNext();
 			$config = array_merge($config, $__doc);
 		}
 		
