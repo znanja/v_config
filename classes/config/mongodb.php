@@ -66,16 +66,7 @@ class Config_MongoDB extends Kohana_Config_Reader
 
 		$config = array();
 
-		try
-		{
-			$documents = $file->find();
-
-			while($documents->hasNext())
-			{
-				$__doc = $documents->getNext();
-				$config = array_merge($config, $__doc);
-			}
-		}catch(MongoCursorException $mex){}
+		$config = $file->findOne();	
 		
 		unset($config['_id']);
 
