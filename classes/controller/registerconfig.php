@@ -34,9 +34,9 @@ class Controller_RegisterConfig extends Controller
 	{
 		$config = array();
 
-		$drop = in_array('--drop-existing', $_SERVER['argv']);
+		$dry_run = in_array('--dry-run', $_SERVER['argv']);
 
-		if($drop)
+		if( ! $dry_run)
 		{
 			echo "Droping existing data - are your sure? y/n: ";
 
@@ -46,6 +46,10 @@ class Controller_RegisterConfig extends Controller
 				echo "Removing existing data\n";
 				$this->_db->drop();
 				echo "Done removing data\n";
+			} else
+			{
+				echo "Stopping\r\n";
+				exit(0);
 			}
 		}
 
@@ -77,7 +81,10 @@ class Controller_RegisterConfig extends Controller
 				$__merged_config = Arr::merge($__config, $__merged_config);
 			}
 			
-			$this->_load($__merged_config, $name);
+			if( ! $dry_run )
+			{
+				$this->_load($__merged_config, $name);
+			}
 
 			echo "Done loading $name\n";
 		}
