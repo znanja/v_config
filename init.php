@@ -2,8 +2,11 @@
 /**
  * Do some bootstrapping for the module
  */
-Route::set('register_config', 'v_config/registerconfig')
-	->defaults(array(
-		'controller' 	=> 'registerconfig',
-		'action'		=> 'index'
-));
+if (Kohana::$is_cli == TRUE)
+{
+	Route::set('register_config', 'v_config/registerconfig')
+		->defaults(array(
+			'controller' 	=> 'registerconfig',
+			'action'		=> 'index'
+	));
+}
